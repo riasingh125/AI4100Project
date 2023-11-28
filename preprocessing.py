@@ -6,7 +6,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.utils import Bunch
 import imageio
 
-def resize_frame(frame, target_size=(64, 64)):
+def resize_frame(frame, target_size=(100, 100)):
     return cv2.resize(frame, target_size)
 
 def load_data(data_path):
@@ -31,14 +31,24 @@ def preprocess_data(data_path):
     # Load data
     videos, labels = load_data(data_path)
 
-    # Split data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(videos, labels, test_size=0.2, random_state=42)
+    print("Number of video: ", len(videos))
+    print("Number of labels: ", len(labels))
 
+    print("first video franes: ", videos[0])
+    print("first label: ", labels[0])
+    # Split data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(videos, labels, test_size=5, random_state=42, stratify=labels)
+
+    print("Number of training samples: ", len(X_train))
+    print("Number of testing samples: ", len(X_test))
+    print("first training sample: ", X_train[0])
+    print("first training label: ", y_train[0])
     # Encode labels
     label_encoder = LabelEncoder()
     y_train_encoded = label_encoder.fit_transform(y_train)
     y_test_encoded = label_encoder.transform(y_test)
 
+    print("label mapping", dict(zip(label_encoder.classes_, range(len(label_encoder.classes_)))))
     # Create a Bunch object to store the preprocessed data
     data = Bunch(
         data=X_train,
@@ -50,5 +60,6 @@ def preprocess_data(data_path):
 
     return data
 
-data_path = "DataCSV.xlsx"  # Update with the path to your Excel dataset file
+data_path = "DataCSV.xlsx" 
 preprocessed_data = preprocess_data(data_path)
+#print(preprocessed_data.data[0])
