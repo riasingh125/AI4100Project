@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.utils import Bunch
 import imageio
+import matplotlib.pyplot as plt
 
 def resize_frame(frame, target_size=(100, 100)):
     return cv2.resize(frame, target_size)
@@ -31,17 +32,17 @@ def preprocess_data(data_path):
     # Load data
     videos, labels = load_data(data_path)
 
-    print("Number of video: ", len(videos))
-    print("Number of labels: ", len(labels))
+   # print("Number of video: ", len(videos))
+    #print("Number of labels: ", len(labels))
 
-    print("first video franes: ", videos[0])
-    print("first label: ", labels[0])
+   # print("first video franes: ", videos[0])
+    #print("first label: ", labels[0])
     # Split data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(videos, labels, test_size=5, random_state=42, stratify=labels)
 
     print("Number of training samples: ", len(X_train))
     print("Number of testing samples: ", len(X_test))
-    print("first training sample: ", X_train[0])
+    #print("first training sample: ", X_train[0])
     print("first training label: ", y_train[0])
     # Encode labels
     label_encoder = LabelEncoder()
@@ -62,4 +63,7 @@ def preprocess_data(data_path):
 
 data_path = "DataCSV.xlsx" 
 preprocessed_data = preprocess_data(data_path)
-#print(preprocessed_data.data[0])
+print(preprocessed_data.data[0][0])
+
+plt.imshow(preprocessed_data.data[0][0], cmap='gray')
+plt.show()
